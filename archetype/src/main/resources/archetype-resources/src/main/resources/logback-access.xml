@@ -1,0 +1,53 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="false">
+    <appender name="logstash-access" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
+          <providers>
+            <timestamp>
+              <timeZone>UTC</timeZone>
+            </timestamp>
+            <pattern>
+              <pattern>
+                {
+                    "rid":            "%i{X-Request-ID}",
+                    "remoteIP":       "%remoteIP",
+                    "localIP":        "%localIP",
+                    "requestContent": "%requestContent",
+                    "responseContent":"%responseContent"
+                }
+              </pattern>
+            </pattern>
+            <requestHeaders>
+              <fieldName>request_headers</fieldName>
+              <lowerCaseHeaderNames>true</lowerCaseHeaderNames>
+              <filter>
+                  <include>host</include>
+                  <include>content-type</include>
+                  <include>user-agent</include>
+                  <include>accept</include>
+                  <include>referer</include>
+                  <include>accept-encoding</include>
+              </filter>
+            </requestHeaders>
+            <responseHeaders>
+              <fieldName>response_headers</fieldName>
+              <lowerCaseHeaderNames>true</lowerCaseHeaderNames>
+            </responseHeaders>
+            <version />
+            <method />
+            <protocol />
+            <statusCode />
+            <requestedUrl />
+            <requestedUri />
+            <remoteHost />
+            <remoteUser />
+            <contentLength />
+            <elapsedTime />
+          </providers>
+        </encoder>
+    </appender>
+    <appender-ref ref="logstash-access" />
+</configuration>

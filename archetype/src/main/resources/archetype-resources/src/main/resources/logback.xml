@@ -1,0 +1,43 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT_OLD_NOT_USED" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} %-5level "rid":"%X{rid}" %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+    <appender name="STDOUT_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc/>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <message/>
+                <logLevel/>
+                <loggerName/>
+                <threadName/>
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                        <maxLength>10240</maxLength>
+                        <shortenedClassNameLength>20</shortenedClassNameLength>
+                        <exclude>^sun${symbol_escape}.reflect${symbol_escape}..*${symbol_escape}.invoke</exclude>
+                        <exclude>^net${symbol_escape}.sf${symbol_escape}.cglib${symbol_escape}.proxy${symbol_escape}.MethodProxy${symbol_escape}.invoke</exclude>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+                <arguments>
+                    <includeNonStructuredArguments>false</includeNonStructuredArguments>
+                    <nonStructuredArgumentsFieldPrefix>arg</nonStructuredArgumentsFieldPrefix>
+                </arguments>
+                <version/>
+            </providers>
+        </encoder>
+    </appender>
+	<root level="INFO">
+        <appender-ref ref="STDOUT_JSON" />
+	</root>
+</configuration>

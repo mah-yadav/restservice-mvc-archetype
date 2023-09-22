@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: ${artifactId}
+  profiles:
+    active: test
+  jackson:
+    default-property-inclusion: NON_NULL
+
+server:
+  servlet:
+    context-path: /${artifactId}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  devtools:
+    add-properties: true
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/certificatestore?authSource=admin&connectTimeoutMS=5000&socketTimeoutMS=5000}
+      auto-index-creation: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, threaddump, heapdump, scheduledtasks, loggers
+      base-path: /status
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+
+info:
+  app:
+    name: Certificate Service
+    description: Certificate Service manages certificates
+    version: 0.0.1
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
+    com:
+      barco:
+        eis:
+          auditservice: DEBUG
